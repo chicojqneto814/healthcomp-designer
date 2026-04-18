@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080, initial-scale=1">
+  <title>HealthComp Designer — Template Parametrizado v1.0</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@600;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --hc-azul: #1C1C4F;
+      --hc-azul-profundo: #14143D;
+      --hc-azul-claro: #2C2C6F;
+      --hc-verde: #108E5E;
+      --hc-verde-claro: #1AAB76;
+      --hc-verde-sutil: rgba(16, 142, 94, 0.12);
+      --hc-branco: #FFFFFF;
+      --hc-off-white: #FAFAF7;
+      --hc-cinza-linha: rgba(255, 255, 255, 0.12);
+      --hc-vermelho: #FF6B6B;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+      --font-display: 'Fraunces', Georgia, serif;
+      --slide-width: 1080px;
+      --slide-height: 1350px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: var(--slide-width);
+      height: var(--slide-height);
+      overflow: hidden;
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    .slide {
+      width: var(--slide-width);
+      height: var(--slide-height);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 80px;
+      overflow: hidden;
+      background: var(--hc-azul);
+      color: var(--hc-branco);
+    }
+
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: -20%; right: -10%;
+      width: 70%; height: 70%;
+      background: radial-gradient(circle, rgba(16, 142, 94, 0.18) 0%, transparent 60%);
+      z-index: 1;
+    }
+
+    .slide::after {
+      content: '';
+      position: absolute;
+      bottom: -200px; left: -200px;
+      width: 500px; height: 500px;
+      border: 1.5px solid var(--hc-verde);
+      border-radius: 50%;
+      opacity: 0.10;
+      z-index: 1;
+    }
+
+    /* HEADER */
+    .slide-header {
+      position: relative; z-index: 10;
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--hc-cinza-linha);
+    }
+    .logo-oficial { height: 42px; width: auto; display: block; }
+    .slide-indicator { display: flex; gap: 10px; align-items: center; }
+    .slide-indicator .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+    }
+    .slide-indicator .dot.active {
+      background: var(--hc-verde); width: 24px; border-radius: 4px;
+    }
+
+    /* CONTENT */
+    .slide-content {
+      position: relative; z-index: 5;
+      flex: 1;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 40px 0;
+    }
+
+    /* TAGS */
+    .date-tag {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: rgba(255, 107, 107, 0.15);
+      border: 1px solid rgba(255, 107, 107, 0.5);
+      padding: 12px 22px; border-radius: 100px;
+      font-size: 14px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--hc-vermelho);
+      margin-bottom: 40px; width: fit-content;
+    }
+    .date-tag::before {
+      content: ''; width: 8px; height: 8px;
+      background: var(--hc-vermelho); border-radius: 50%;
+    }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 14px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--hc-verde-claro);
+      margin-bottom: 40px; width: fit-content;
+    }
+    .eyebrow::before {
+      content: ''; width: 24px; height: 2px;
+      background: var(--hc-verde);
+    }
+
+    /* TIPOGRAFIA */
+    .headline {
+      font-family: var(--font-display); font-weight: 900;
+      font-size: 118px; line-height: 0.95;
+      letter-spacing: -0.035em;
+      color: var(--hc-branco); margin-bottom: 32px;
+    }
+    .headline-medium {
+      font-family: var(--font-display); font-weight: 900;
+      font-size: 82px; line-height: 1;
+      letter-spacing: -0.025em;
+      color: var(--hc-branco); margin-bottom: 28px;
+    }
+    .headline-small {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: 58px; line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--hc-branco); margin-bottom: 28px;
+    }
+    .highlight-green { color: var(--hc-verde-claro); font-style: italic; }
+    .highlight-accent { color: var(--hc-vermelho); }
+    .body-large {
+      font-size: 32px; line-height: 1.4; font-weight: 400;
+      color: rgba(255, 255, 255, 0.88);
+      margin-bottom: 24px; max-width: 860px;
+    }
+    .body-medium {
+      font-size: 26px; line-height: 1.5; font-weight: 400;
+      color: rgba(255, 255, 255, 0.82);
+      max-width: 820px;
+    }
+
+    /* CARD DE FONTE */
+    .source-card {
+      margin-top: 48px; padding: 28px 32px;
+      background: rgba(255, 255, 255, 0.05);
+      border-left: 3px solid var(--hc-verde);
+      border-radius: 4px;
+    }
+    .source-card-label {
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--hc-verde-claro);
+      margin-bottom: 10px; display: block;
+    }
+    .source-card-text {
+      font-size: 19px; line-height: 1.4;
+      color: rgba(255, 255, 255, 0.88); font-weight: 500;
+    }
+    .source-card-meta {
+      font-size: 14px; color: rgba(255, 255, 255, 0.55);
+      margin-top: 8px; font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* LISTA CONSEQUÊNCIAS (slide tipo 2) */
+    .consequence-list { list-style: none; margin-top: 40px; }
+    .consequence-list li {
+      display: flex; align-items: flex-start; gap: 28px;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--hc-cinza-linha);
+    }
+    .consequence-list li:last-child { border-bottom: none; }
+    .consequence-arrow {
+      flex-shrink: 0; width: 48px; height: 48px;
+      background: var(--hc-verde-sutil);
+      border: 1px solid var(--hc-verde);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--hc-verde-claro);
+      font-size: 22px; font-weight: 700;
+    }
+    .consequence-text {
+      flex: 1; font-size: 28px; line-height: 1.35;
+      color: rgba(255, 255, 255, 0.92);
+      font-weight: 500; padding-top: 6px;
+    }
+    .consequence-text strong {
+      color: var(--hc-verde-claro); font-weight: 600;
+    }
+
+    /* BIG STAT (slide tipo 3) */
+    .big-stat {
+      display: flex; align-items: baseline; gap: 8px;
+      margin-bottom: 32px; flex-wrap: wrap;
+    }
+    .big-stat-number {
+      font-family: var(--font-display); font-weight: 900;
+      font-size: 280px; line-height: 0.85;
+      letter-spacing: -0.06em;
+      color: var(--hc-verde-claro);
+    }
+    .stat-label {
+      font-size: 22px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--hc-verde-claro);
+      margin-bottom: 24px;
+    }
+
+    /* LISTA NUMERADA (slide tipo 4) */
+    .check-list { list-style: none; margin-top: 32px; }
+    .check-list li {
+      display: flex; align-items: flex-start; gap: 24px;
+      margin-bottom: 32px;
+    }
+    .check-list .number {
+      flex-shrink: 0; width: 56px; height: 56px;
+      background: var(--hc-verde); border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--hc-azul);
+      font-family: var(--font-display); font-weight: 900;
+      font-size: 28px;
+    }
+    .check-list .content { flex: 1; padding-top: 8px; }
+    .check-list .title {
+      font-family: var(--font-display); font-weight: 700;
+      font-size: 32px; line-height: 1.1;
+      color: var(--hc-branco); margin-bottom: 6px;
+    }
+    .check-list .description {
+      font-size: 19px; line-height: 1.4;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* CTA (slide tipo 5) */
+    .slide-cta .slide-content {
+      justify-content: space-between;
+      padding: 60px 0 20px;
+    }
+    .manifesto-block {
+      text-align: center; margin-top: auto; margin-bottom: 60px;
+    }
+    .manifesto-quote {
+      font-family: var(--font-display); font-weight: 900;
+      font-size: 68px; line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: var(--hc-branco);
+      margin-bottom: 24px;
+    }
+    .manifesto-quote .accent {
+      color: var(--hc-verde-claro); font-style: italic;
+      display: block; font-size: 74px; margin-top: 8px;
+    }
+    .manifesto-sub {
+      font-size: 24px; line-height: 1.5;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 400;
+      max-width: 680px; margin: 0 auto;
+    }
+    .cta-button-container {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 16px;
+    }
+    .cta-button {
+      display: inline-flex; align-items: center; gap: 16px;
+      background: var(--hc-verde); color: var(--hc-azul);
+      padding: 26px 56px;
+      font-size: 22px; font-weight: 700;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      border-radius: 100px;
+    }
+    .cta-button::after { content: '→'; font-size: 28px; }
+    .cta-hint {
+      font-size: 15px; color: rgba(255, 255, 255, 0.55);
+      letter-spacing: 0.08em; text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    /* FOOTER */
+    .slide-footer {
+      position: relative; z-index: 10;
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 32px;
+      border-top: 1px solid var(--hc-cinza-linha);
+      font-size: 14px; letter-spacing: 0.05em;
+      color: rgba(255, 255, 255, 0.55);
+      font-weight: 500;
+    }
+    .slide-footer .brand-tag {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .slide-footer .brand-tag::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--hc-verde); border-radius: 50%;
+    }
+
+    /* HIDDEN por padrão - só ativa conforme tipo de slide */
+    [data-slide-type] > .slide-content > * {
+      display: none;
+    }
+    [data-slide-type="hero"] .type-hero,
+    [data-slide-type="context"] .type-context,
+    [data-slide-type="stat"] .type-stat,
+    [data-slide-type="action"] .type-action,
+    [data-slide-type="cta"] .type-cta {
+      display: flex;
+      flex-direction: column;
+    }
+    [data-slide-type="hero"] .type-hero.inline,
+    [data-slide-type="context"] .type-context.inline,
+    [data-slide-type="stat"] .type-stat.inline,
+    [data-slide-type="action"] .type-action.inline,
+    [data-slide-type="cta"] .type-cta.inline {
+      display: inline-flex;
+    }
+  </style>
+</head>
+<body>
+
+<div class="slide" id="slide-root" data-slide-type="hero">
+  <div class="slide-header">
+    <img src="assets/logo_horizontal_verde.png" alt="HealthComp" class="logo-oficial">
+    <div class="slide-indicator" id="indicator"></div>
+  </div>
+
+  <div class="slide-content">
+    <!-- ============ TYPE: HERO ============ -->
+    <div class="type-hero inline date-tag" id="hero-tag"></div>
+    <h1 class="type-hero headline" id="hero-headline"></h1>
+    <p class="type-hero body-large" id="hero-body"></p>
+    <div class="type-hero source-card" id="hero-source-card">
+      <span class="source-card-label" id="hero-source-label"></span>
+      <div class="source-card-text" id="hero-source-text"></div>
+      <div class="source-card-meta" id="hero-source-meta"></div>
+    </div>
+
+    <!-- ============ TYPE: CONTEXT ============ -->
+    <span class="type-context inline eyebrow" id="context-eyebrow"></span>
+    <h2 class="type-context headline-medium" id="context-headline"></h2>
+    <ul class="type-context consequence-list" id="context-list"></ul>
+
+    <!-- ============ TYPE: STAT ============ -->
+    <span class="type-stat stat-label" id="stat-label"></span>
+    <div class="type-stat big-stat">
+      <span class="big-stat-number" id="stat-number"></span>
+    </div>
+    <h2 class="type-stat headline-small" id="stat-headline"></h2>
+    <p class="type-stat body-medium" id="stat-body" style="margin-top: 32px;"></p>
+
+    <!-- ============ TYPE: ACTION ============ -->
+    <span class="type-action inline eyebrow" id="action-eyebrow"></span>
+    <h2 class="type-action headline-small" id="action-headline" style="margin-bottom: 16px;"></h2>
+    <p class="type-action body-medium" id="action-body" style="margin-bottom: 8px;"></p>
+    <ul class="type-action check-list" id="action-list"></ul>
+
+    <!-- ============ TYPE: CTA ============ -->
+    <div class="type-cta manifesto-block">
+      <div class="manifesto-quote" id="cta-quote"></div>
+      <p class="manifesto-sub" id="cta-sub"></p>
+    </div>
+    <div class="type-cta cta-button-container">
+      <div class="cta-button" id="cta-button"></div>
+      <div class="cta-hint" id="cta-hint"></div>
+    </div>
+  </div>
+
+  <div class="slide-footer">
+    <span>healthcomp.com.br</span>
+    <span class="brand-tag">Performance operacional</span>
+  </div>
+</div>
+
+<script>
+  // ============================================================
+  //  HealthComp Designer — Motor de Parametrização v1.1
+  //  Reescrito com primitivos compatíveis com WebKit legado
+  //  (wkhtmltoimage usa WebKit antigo — evita URLSearchParams,
+  //  document.fonts.ready e APIs modernas)
+  // ============================================================
+
+  function getDataParam() {
+    var url = window.location.href;
+    var qIndex = url.indexOf('?');
+    if (qIndex === -1) return null;
+    var query = url.substring(qIndex + 1);
+    // Remove hash se houver
+    var hashIndex = query.indexOf('#');
+    if (hashIndex > -1) query = query.substring(0, hashIndex);
+    var pairs = query.split('&');
+    for (var i = 0; i < pairs.length; i++) {
+      var kv = pairs[i].split('=');
+      if (kv[0] === 'data' && kv[1]) {
+        return decodeURIComponent(kv[1]);
+      }
+    }
+    return null;
+  }
+
+  function decodeData() {
+    var b64 = getDataParam();
+    if (!b64) return null;
+    try {
+      var binary = atob(b64);
+      // UTF-8 decode compatível
+      var jsonStr = decodeURIComponent(escape(binary));
+      return JSON.parse(jsonStr);
+    } catch (e) {
+      // Se falhar, mostra erro no preview
+      document.body.innerHTML = '<div style="padding:40px;color:red;font-family:monospace;font-size:24px">ERRO DECODE: ' + e.message + '</div>';
+      return null;
+    }
+  }
+
+  function buildHeadline(parts) {
+    if (typeof parts === 'string') return parts;
+    if (!parts || !parts.length) return '';
+    var html = '';
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      if (i > 0) html += ' ';
+      if (typeof p === 'string') {
+        html += p;
+      } else if (p.style === 'green') {
+        html += '<span class="highlight-green">' + p.text + '</span>';
+      } else if (p.style === 'accent') {
+        html += '<span class="highlight-accent">' + p.text + '</span>';
+      } else {
+        html += p.text;
+      }
+    }
+    return html;
+  }
+
+  function renderIndicator(current, total) {
+    var wrapper = document.getElementById('indicator');
+    wrapper.innerHTML = '';
+    for (var i = 1; i <= total; i++) {
+      var dot = document.createElement('div');
+      dot.className = 'dot' + (i === current ? ' active' : '');
+      wrapper.appendChild(dot);
+    }
+  }
+
+  function renderHero(data) {
+    document.getElementById('hero-tag').textContent = data.tag || '';
+    document.getElementById('hero-headline').innerHTML = buildHeadline(data.headline_parts);
+    document.getElementById('hero-body').innerHTML = data.body || '';
+    if (data.source) {
+      document.getElementById('hero-source-label').textContent = data.source.label || '';
+      document.getElementById('hero-source-text').innerHTML = data.source.text || '';
+      document.getElementById('hero-source-meta').textContent = data.source.meta || '';
+    } else {
+      document.getElementById('hero-source-card').style.display = 'none';
+    }
+  }
+
+  function renderContext(data) {
+    document.getElementById('context-eyebrow').textContent = data.eyebrow || '';
+    document.getElementById('context-headline').innerHTML = buildHeadline(data.headline_parts);
+    var list = document.getElementById('context-list');
+    list.innerHTML = '';
+    var items = data.items || [];
+    for (var i = 0; i < items.length; i++) {
+      var li = document.createElement('li');
+      li.innerHTML = '<div class="consequence-arrow">→</div>' +
+                     '<div class="consequence-text">' + items[i] + '</div>';
+      list.appendChild(li);
+    }
+  }
+
+  function renderStat(data) {
+    document.getElementById('stat-label').textContent = data.label || '';
+    document.getElementById('stat-number').textContent = data.number || '';
+    document.getElementById('stat-headline').innerHTML = buildHeadline(data.headline_parts);
+    document.getElementById('stat-body').innerHTML = data.body || '';
+  }
+
+  function renderAction(data) {
+    document.getElementById('action-eyebrow').textContent = data.eyebrow || '';
+    document.getElementById('action-headline').innerHTML = buildHeadline(data.headline_parts);
+    document.getElementById('action-body').innerHTML = data.body || '';
+    var list = document.getElementById('action-list');
+    list.innerHTML = '';
+    var items = data.items || [];
+    for (var i = 0; i < items.length; i++) {
+      var li = document.createElement('li');
+      li.innerHTML = '<div class="number">' + (i+1) + '</div>' +
+                     '<div class="content">' +
+                       '<div class="title">' + items[i].title + '</div>' +
+                       '<div class="description">' + (items[i].description || '') + '</div>' +
+                     '</div>';
+      list.appendChild(li);
+    }
+  }
+
+  function renderCta(data) {
+    var quote = document.getElementById('cta-quote');
+    if (data.quote_parts) {
+      var html = buildHeadline(data.quote_parts);
+      if (data.accent) {
+        html += '<span class="accent">' + data.accent + '</span>';
+      }
+      quote.innerHTML = html;
+    } else {
+      quote.textContent = data.quote || '';
+    }
+    document.getElementById('cta-sub').innerHTML = data.sub || '';
+    document.getElementById('cta-button').textContent = data.button_text || 'Saiba mais';
+    document.getElementById('cta-hint').textContent = data.hint || 'healthcomp.com.br';
+    document.getElementById('slide-root').classList.add('slide-cta');
+  }
+
+  function render() {
+    var data = decodeData();
+    if (!data) {
+      // Preview default
+      document.getElementById('hero-tag').textContent = 'Preview sem dados';
+      document.getElementById('hero-headline').innerHTML = 'Template HealthComp<br>em modo <span class="highlight-green">preview</span>.';
+      document.getElementById('hero-body').textContent = 'Adicione ?data=BASE64 na URL.';
+      renderIndicator(1, 5);
+      return;
+    }
+
+    renderIndicator(data.slide_number || 1, data.total_slides || 5);
+
+    var root = document.getElementById('slide-root');
+    root.setAttribute('data-slide-type', data.type);
+
+    switch(data.type) {
+      case 'hero': renderHero(data); break;
+      case 'context': renderContext(data); break;
+      case 'stat': renderStat(data); break;
+      case 'action': renderAction(data); break;
+      case 'cta': renderCta(data); break;
+    }
+  }
+
+  // Executa imediatamente (DOM parseado) + redundância via window.onload
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    render();
+  } else {
+    document.addEventListener('DOMContentLoaded', render);
+  }
+  window.addEventListener('load', render);
+</script>
+</body>
+</html>
